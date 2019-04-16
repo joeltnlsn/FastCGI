@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace FastCGI
 {
@@ -62,24 +63,70 @@ namespace FastCGI
         /// The FastCGI parameters received by the webserver, in raw byte arrays.
         /// </summary>
         /// <remarks>
-        /// Use <see cref="GetParameterASCII(string)"/> and <see cref="GetParameterUTF8(string)"/> to get strings instead of byte arrays.
+        /// Use <see cref="GetFCGIParam(string, Encoding)"/>to get strings instead of byte arrays.
         /// </remarks>
         public Dictionary<string, byte[]> Parameters = new Dictionary<string, byte[]>();
 
         /// <summary>
-        /// Returns the parameter with the given name as an ASCII encoded string.
+        /// Returns the parameter with the given name as a string with some encoding sprinkled on top.
+        /// If no encoding source is provided, ASCII is used.
         /// </summary>
-        public string GetParameterASCII(string name)
+        public string GetFCGIParam(string name, Encoding encoding = null)
         {
-            return Encoding.ASCII.GetString(Parameters[name]);
+            if (encoding == null)
+                encoding = Encoding.ASCII;
+
+            return encoding.GetString(Parameters[name]);
         }
 
         /// <summary>
-        /// Returns the parameter with the given name as an UTF-8 encoded string.
+        /// Gets a specified URL query parameter from the request.
+        /// The webserver MUST be configured to include fastcgi_params otherwise this won't work.
+        /// If no encoding source is provided, ASCII is used.
         /// </summary>
-        public string GetParameterUTF8(string name)
+        public string GetURLQueryParam(string name, Encoding encoding = null)
         {
-            return Encoding.UTF8.GetString(Parameters[name]);
+            if (encoding == null)
+                encoding = Encoding.ASCII;
+
+            return HttpUtility.ParseQueryString(GetURLQueryString(encoding)).Get(name);
+        }
+
+        /// <summary>
+        /// Returns the whole URL query string, minus the URL. Just the query, hold the URL please. I'm URL intolerant.
+        /// The webserver MUST be configured to include fastcgi_params otherwise this won't work.
+        /// If no encoding source is provided, ASCII is used.
+        /// </summary>
+        public string GetURLQueryString(Encoding encoding = null)
+        {
+            if (encoding == null)
+                encoding = Encoding.ASCII;
+
+            if (Parameters.ContainsKey("REQUEST_URI"))
+            {
+                Uri u = new Uri(GetFCGIParam("REQUEST_URI", encoding));
+                return u.Query;
+            }
+            else
+            {
+                throw new Exception("The URI of the request could not be found. Please make sure your webserver is configured to pass this value to the request.");
+            }
+        }
+
+        /// <summary>
+        /// Returns a dictionary containing the key and value pairs for the URL query string.
+        /// The webserver MUST be configured to include fastcgi_params otherwise this won't work.
+        /// </summary>
+        public Dictionary<string, string> GetURLQueryParamDict()
+        {
+            Dictionary<string, string> temp = new Dictionary<string, string>();
+            var shit = HttpUtility.ParseQueryString(GetURLQueryString());
+            foreach (string key in shit.Keys)
+            {
+                temp.Add(key, shit.Get(key));
+            }
+
+            return temp;
         }
 
         /// <summary>
@@ -132,10 +179,7 @@ namespace FastCGI
         /// <remarks>
         /// Will return incomplete data until FinishedRequestBody is true.
         /// </remarks>
-        public byte[] GetBody()
-        {
-            return RequestBodyStream.ToArray();
-        }
+        public byte[] GetBody() => RequestBodyStream.ToArray();
 
         /// <summary>
         /// Used internally. Feeds a <see cref="Record">Record</see> to this request for processing.
@@ -182,7 +226,7 @@ namespace FastCGI
         /// Appends data to the response body.
         /// </summary>
         /// <remarks>
-        /// The given data will be sent immediately to the webserver as a single stdout record.
+        /// The given data will be sent out in 64KB chunks.
         /// </remarks>
         /// <param name="data">The data to append.</param>
         public void WriteResponse(byte[] data)
@@ -222,34 +266,15 @@ namespace FastCGI
         }
 
         /// <summary>
-        /// Appends an ASCII string to the response body.
+        /// Appends a string to the body of the response.
         /// </summary>
         /// <remarks>
-        /// This is a helper function, it converts the given string to ASCII bytes and feeds it to <see cref="WriteResponse"/>.
+        /// This is a helper function or some shit. It converts the provided string into bytes using the specified encoding, then sends them.
         /// </remarks>
-        /// <param name="data">The string to append, encoded in ASCII.</param>
+        /// <param name="str">The string to append</param>
+        /// <param name="encoding">The encoding source to use</param>
         /// <seealso cref="WriteResponse"/>
-        /// <seealso cref="WriteResponseUtf8"/>
-        public void WriteResponseASCII(string data)
-        {
-            var bytes = Encoding.ASCII.GetBytes(data);
-            WriteResponse(bytes);
-        }
-
-        /// <summary>
-        /// Appends an UTF-8 string to the response body.
-        /// </summary>
-        /// <remarks>
-        /// This is a helper function, it converts the given string to UTF-8 bytes and feeds it to <see cref="WriteResponse"/>.
-        /// </remarks>
-        /// <param name="data">The string to append, encoded in UTF-8.</param>
-        /// <seealso cref="WriteResponse"/>
-        /// <seealso cref="WriteResponseASCII"/>
-        public void WriteResponseUtf8(string data)
-        {
-            var bytes = Encoding.UTF8.GetBytes(data);
-            WriteResponse(bytes);
-        }
+        public void WriteResponseASCII(string str, Encoding encoding) => WriteResponse(encoding.GetBytes(str));
 
         public bool IsOpen { get; protected set; } = true;
 
@@ -280,6 +305,5 @@ namespace FastCGI
             }
             IsOpen = false;
         }
-
     }
 }
