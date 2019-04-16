@@ -352,6 +352,8 @@ namespace FastCGI
 
         /// <summary>
         /// This method never returns! Starts listening for FastCGI requests on the given port.
+        /// This method only accepts connections originating from the same machine, i.e. 127.0.0.1
+        /// If that's not what you want, use RunUnsafe().
         /// </summary>
         /// <remarks>
         /// Use <see cref="OnRequestReceived"/> to react to incoming requests.
@@ -371,6 +373,22 @@ namespace FastCGI
                     Thread.Sleep(1);
             }
         }
-
+        
+        /// <summary>
+        /// This method never returns. Until it does.
+        /// This method is just like <see cref="Run(int)" /> except it accepts connections from anywhere instead of just 127.0.0.1
+        /// </summary>
+        public void RunInsecure(int port)
+        {
+	        this.IsStopping = false;
+	        this.Listen(new IPEndPoint(IPAddress.Any, port));
+	        while (!this.IsStopping)
+	        {
+		        if (!this.Process())
+		        {
+			        Thread.Sleep(1);
+		        }
+	        }
+        }
     }
 }
