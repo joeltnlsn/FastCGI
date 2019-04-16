@@ -18,6 +18,7 @@ Check out [this place](https://github.com/Brosilio/FastCGI/releases) for release
 
 I'm way too lazy to make extensive docs for this version. The original documentation by Lukas should work in most
 cases, but please view the [Breaking Changes](breakingchanges.md) file to see what changed.
+
 Entirely new features are documented [here.](docs.md)
 
 ## Basic usage
