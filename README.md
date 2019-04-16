@@ -2,7 +2,9 @@
 
 | Windows/.NET | Linux/Mono |
 | ------------ | ---------- |
-| [![Build status](https://ci.appveyor.com/api/projects/status/bm1ohjrtrp878i8y?svg=true)](https://ci.appveyor.com/project/LukasBoersma/fastcgi) | [![Build Status](https://travis-ci.org/LukasBoersma/FastCGI.svg)](https://travis-ci.org/LukasBoersma/FastCGI) |
+| wtf is this | I don't know how this build system works just build it yourself|
+
+This is a modified and maintained version of FastCGI by whatever dude originally made it.
 
 This is an implementation of [FastCGI](http://www.fastcgi.com/devkit/doc/fcgi-spec.html) for .NET, written in C#. It implements the parts of the protocol that are necessary to build a simple web application using .NET.
 
@@ -12,28 +14,19 @@ This means that you can write web applications in C# that serve dynamic content.
 
 This software is distributed under the terms of the MIT license. You can use it for your own projects for free under the conditions specified in LICENSE.txt.
 
-If you have questions, feel free to contact me. Visit [lukas-boersma.com](https://lukas-boersma.com) for my contact details.
+If you have questions, feel free to contact me. Actually, I changed my mind. Don't.
 
 If you think you found a bug, you can open an Issue on Github. If you make changes to this library, I would be happy about a pull request.
 
 ## Documentation
 
-The project documentation is hosted here: [fastcgi-for-net.readthedocs.org](http://fastcgi-for-net.readthedocs.org/en/latest/)
+the code is undocumented and uncommented so you'll have to guess or read the source and fully understand it.
 
-The user guide is mostly the same as this readme. [Here is a direct link to the API reference](http://fastcgi-for-net.readthedocs.org/en/latest/api_reference).
+
+Lukas has probably documented it somewhere though, so check out the original repo.
 
 ## Nuget
-
-The library is available via [NuGet](https://www.nuget.org/packages/FastCGI/). To install, type this in the package manager console:
-
-    Install-Package FastCGI
-
-Or, using the command-line interface:
-
-    nuget install FastCGI
-
-For more information, refer to the [NuGet documentation](https://docs.nuget.org/consume).
-
+This verion is not on nugget or whatever.
 ## Basic usage
 
 The most common usage scenario is to use this library together with a web server like Apache and nginx. The web server will serve static content and forward HTTP requests for dynamic content to your application.
@@ -71,6 +64,8 @@ For nginx, use `fastcgi_pass` to pass requests to your FastCGI application:
         fastcgi_pass   127.0.0.1:19000; # Pass all requests to port 19000 via FastCGI.
         include fastcgi_params; # (Optional): Set several FastCGI parameters like the remote IP and other metadata.
     }
+
+For apache, I have no idea but Lukas added a link down there so check that out.
 
 For more details, refer to your web server documentation for configuration details:
 
