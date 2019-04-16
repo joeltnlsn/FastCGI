@@ -1,10 +1,10 @@
 # FastCGI for .NET
 
-| Windows/.NET | Linux/Mono |
-| ------------ | ---------- |
-| wtf is this | I don't know how this build system works just build it yourself|
+This is a modified and maintained version of FastCGI by Lukas Boersma.
 
-This is a modified and maintained version of FastCGI by whatever dude originally made it.
+As a few breaking changes between the original version and this one were made, they are not compatible.
+There are a number of steps required to move from the original version to this one.
+View these changes [here.](breakingchanges.md)
 
 This is an implementation of [FastCGI](http://www.fastcgi.com/devkit/doc/fcgi-spec.html) for .NET, written in C#. It implements the parts of the protocol that are necessary to build a simple web application using .NET.
 
@@ -20,13 +20,10 @@ If you think you found a bug, you can open an Issue on Github. If you make chang
 
 ## Documentation
 
-the code is undocumented and uncommented so you'll have to guess or read the source and fully understand it.
+I'm way too lazy to make extensive docs for this version. The original documentation by Lukas should work in most
+cases, but please view the [Breaking Changes](breakingchanges.md) file to see what changed.
+Entirely new features are documented [here.](docs.md)
 
-
-Lukas has probably documented it somewhere though, so check out the original repo.
-
-## Nuget
-This verion is not on nugget or whatever.
 ## Basic usage
 
 The most common usage scenario is to use this library together with a web server like Apache and nginx. The web server will serve static content and forward HTTP requests for dynamic content to your application.
@@ -46,7 +43,7 @@ app.OnRequestReceived += (sender, request) =>
           "HTTP/1.1 200 OK\n"
         + "Content-Type:text/html\n"
         + "\n"
-        + "Hello World!";
+        + "Goodbye, world!";
 
     request.WriteResponseASCII(responseString);
     request.Close();
@@ -61,11 +58,9 @@ app.Run(19000);
 For nginx, use `fastcgi_pass` to pass requests to your FastCGI application:
 
     location / {
-        fastcgi_pass   127.0.0.1:19000; # Pass all requests to port 19000 via FastCGI.
-        include fastcgi_params; # (Optional): Set several FastCGI parameters like the remote IP and other metadata.
+        fastcgi_pass   127.0.0.1:19000; # Pass all requests for / to your FastCGI server on port 19000.
+        include fastcgi_params; # (Optional but very useful): Set several FastCGI parameters like the remote IP and other metadata.
     }
-
-For apache, I have no idea but Lukas added a link down there so check that out.
 
 For more details, refer to your web server documentation for configuration details:
 
