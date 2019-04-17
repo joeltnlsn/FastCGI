@@ -101,16 +101,7 @@ namespace FastCGI
         {
             if (encoding == null)
                 encoding = Encoding.ASCII;
-
-            if (Parameters.ContainsKey("REQUEST_URI"))
-            {
-                Uri u = new Uri(GetFCGIParam("REQUEST_URI", encoding));
-                return u.Query;
-            }
-            else
-            {
-                throw new Exception("The URI of the request could not be found. Please make sure your webserver is configured to pass this value to the request.");
-            }
+            return GetFCGIParam("QUERY_STRING", encoding);
         }
 
         /// <summary>
@@ -274,7 +265,7 @@ namespace FastCGI
         /// <param name="str">The string to append</param>
         /// <param name="encoding">The encoding source to use</param>
         /// <seealso cref="WriteResponse"/>
-        public void WriteResponseASCII(string str, Encoding encoding) => WriteResponse(encoding.GetBytes(str));
+        public void WriteResponseString(string str, Encoding encoding) => WriteResponse(encoding.GetBytes(str));
 
         public bool IsOpen { get; protected set; } = true;
 
