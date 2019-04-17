@@ -1,13 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastCGI.Demo", "FastCGI.Demo\FastCGI.Demo.csproj", "{C8332CD7-2271-4506-934B-63BFDF2C6F08}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastCGI", "FastCGI\FastCGI.csproj", "{4E960156-AAFA-44E7-9F0E-FB19069710A6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastCGI.Tests", "FastCGI.Tests\FastCGI.Tests.csproj", "{E455D80A-F5D1-442C-BC25-3BC06BC17D72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +15,12 @@ Global
 		{4E960156-AAFA-44E7-9F0E-FB19069710A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E960156-AAFA-44E7-9F0E-FB19069710A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E960156-AAFA-44E7-9F0E-FB19069710A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C8332CD7-2271-4506-934B-63BFDF2C6F08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C8332CD7-2271-4506-934B-63BFDF2C6F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C8332CD7-2271-4506-934B-63BFDF2C6F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C8332CD7-2271-4506-934B-63BFDF2C6F08}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E455D80A-F5D1-442C-BC25-3BC06BC17D72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E455D80A-F5D1-442C-BC25-3BC06BC17D72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E455D80A-F5D1-442C-BC25-3BC06BC17D72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E455D80A-F5D1-442C-BC25-3BC06BC17D72}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55910EA2-CF1C-4F41-B5A7-4CB0D7828FE7}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
@@ -64,8 +58,5 @@ Global
 		$2.inheritsSet = Mono
 		$2.inheritsScope = text/x-csharp
 		$2.scope = text/x-csharp
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
