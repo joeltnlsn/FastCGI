@@ -375,6 +375,41 @@ namespace FastCGI
         }
         
         /// <summary>
+        /// Like the other Run() methods, this one does not return.
+        /// </summary>
+        /// <param name="ip">The IP to bind to.</param>
+        /// <param name="port">The port to listen on.</param>
+        public void Run(IPAddress ip, int port)
+        {
+            IsStopping = false;
+            Listen(new IPEndPoint(ip, port));
+            while(!IsStopping)
+            {
+                if(!this.Process())
+                {
+                    Thread.Sleep(1);
+                }
+            }
+        }
+
+        /// <summary>
+        /// This method never returns.
+        /// </summary>
+        /// <param name="endpoint">The IP endpoint to listen on.</param>
+        public void Run(IPEndPoint endpoint)
+        {
+            IsStopping = false;
+            Listen(endpoint);
+            while (!IsStopping)
+            {
+                if (!this.Process())
+                {
+                    Thread.Sleep(1);
+                }
+            }
+        }
+
+        /// <summary>
         /// This method never returns. Until it does.
         /// This method is just like <see cref="Run(int)" /> except it accepts connections from anywhere instead of just 127.0.0.1
         /// </summary>
