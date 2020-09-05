@@ -361,17 +361,7 @@ namespace FastCGI
         /// </remarks>
         public void Run(int port)
         {
-            IsStopping = false;
-            Listen(port);
-
-            while (!IsStopping)
-            {
-                var receivedARecord = Process();
-
-                // If no records were processed, sleep for 1 millisecond until the next try to reduce CPU load
-                if(!receivedARecord)
-                    Thread.Sleep(1);
-            }
+            Run(new IPEndPoint(IPAddress.Any, port));
         }
         
         /// <summary>
@@ -381,15 +371,7 @@ namespace FastCGI
         /// <param name="port">The port to listen on.</param>
         public void Run(IPAddress ip, int port)
         {
-            IsStopping = false;
-            Listen(new IPEndPoint(ip, port));
-            while(!IsStopping)
-            {
-                if(!this.Process())
-                {
-                    Thread.Sleep(1);
-                }
-            }
+            Run(new IPEndPoint(ip, port));
         }
 
         /// <summary>
@@ -407,23 +389,6 @@ namespace FastCGI
                     Thread.Sleep(1);
                 }
             }
-        }
-
-        /// <summary>
-        /// This method never returns. Until it does.
-        /// This method is just like <see cref="Run(int)" /> except it accepts connections from anywhere instead of just 127.0.0.1
-        /// </summary>
-        public void RunInsecure(int port)
-        {
-	        this.IsStopping = false;
-	        this.Listen(new IPEndPoint(IPAddress.Any, port));
-	        while (!this.IsStopping)
-	        {
-		        if (!this.Process())
-		        {
-			        Thread.Sleep(1);
-		        }
-	        }
         }
     }
 }
