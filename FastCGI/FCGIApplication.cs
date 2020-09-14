@@ -363,7 +363,12 @@ namespace FastCGI
         {
             Run(new IPEndPoint(IPAddress.Any, port));
         }
-        
+
+        public void Run(string _IPAddress, int port)
+        {
+            Run(new IPEndPoint(IPAddress.Parse(_IPAddress), port));
+        }
+
         /// <summary>
         /// Like the other Run() methods, this one does not return.
         /// </summary>
